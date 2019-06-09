@@ -3,14 +3,10 @@
  * @name                Gennode Registrar
  * @module              index.js
  * @description         Module registers routes on gennode_authorization server.
- * @copyright           June 9
+ * @copyright           June 9, 2019
  */
 
 class GennodeRegistrar{
-
-    request         = require('request');
-    listEndpoints   = require('express-list-endpoints');
-    routes          = [];
 
     /**
      * @name                - Constructor
@@ -20,9 +16,13 @@ class GennodeRegistrar{
      * @param gennodeAuthorizationEndPoint - Service authorization endpoint
      */
     constructor(serviceName, serviceId, gennodeAuthorizationEndPoint){
-        this.serviceName            = serviceName;
-        this.serviceId              = serviceId;
-        this.gennodeAuthEndPoint    = gennodeAuthorizationEndPoint;
+        this.request        = require('request');
+        this.listEndpoints  = require('express-list-endpoints');
+        this.routes         = [];
+
+        this.serviceName    = serviceName;
+        this.serviceId      = serviceId;
+        this.gennodeAuthURL = gennodeAuthorizationEndPoint;
     }
 
     /**
@@ -32,19 +32,59 @@ class GennodeRegistrar{
      * @param callback      - Callback function (error, response, body)
      */
     register(app, callback){
-        this.routes = this.listEndpoints(app);
-        this.sendRequest(this.constructBody(),"POST",this.gennodeAuthEndPoint,callback);
+        this.routes = this.refactorRoutes(this.listEndpoints(app));
+        this.sendRequest(this.constructBody(),"POST",this.gennodeAuthURL,callback);
     }
 
     /**
      * @name                - Register directly
      * @description         - Sends routes directly, instead of using the express instance, convenient for other frameworks
+     * "routes": [
+             {
+               "method": "POST",
+               "route": "http://root/sample",
+               "group": "Company",
+               "name": "Create company",
+               "description": "Create company data."
+             },
+             {
+               "method": "GET",
+               "route": "http://root/sample",
+               "group": "Company",
+               "name": "Retrieves company",
+               "description": "Retrieves company data."
+             }
+        ]
      * @param routes        - Service routes.
      * @param callback      - Callback function (error, response, body)
      */
     registerDirectly(routes,callback){
         this.routes = routes;
-        this.sendRequest(this.constructBody(),"POST",this.gennodeAuthEndPoint,callback);
+        this.sendRequest(this.constructBody(),"POST",this.gennodeAuthURL,callback);
+    }
+
+    /**
+     * @name                - Refactor routes
+     * @description         - Refactor routes to suit gennode authorization service
+     * @param routes        - Routes
+     * @returns {Array}     - Refactored route
+     */
+    refactorRoutes(routes){
+        let constructedRoutes = [];
+
+        routes.forEach((endPoint)=> {
+            endPoint.methods.forEach((method) => {
+                let routeData = {
+                    method : method,
+                    route : endPoint.path,
+                    group : endPoint.path,
+                    name : `${endPoint.path} ${method}`,
+                    description : `${method} method for route : ${endPoint.path}, for service : ${this.serviceName}`,
+                };
+                constructedRoutes.push(routeData);
+            });
+        });
+        return constructedRoutes;
     }
 
     /**
@@ -55,7 +95,7 @@ class GennodeRegistrar{
      * @param endPoint      - Endpoint
      * @param callback      - Callback function (error, response, body)
      */
-    private sendRequest(body, method, endPoint, callback){
+    sendRequest(body, method, endPoint, callback){
 
         let options = option(method,body); // defines sending options
         this.request(endPoint,options,function (err,res,body) {
@@ -83,7 +123,7 @@ class GennodeRegistrar{
      * @description             - Constructs body data
      * @returns {{name: *, serviceId: *, routes: Array}}
      */
-    private constructBody(){
+    constructBody(){
         return {
             "name": this.serviceName,
             "serviceId": this.serviceId,
