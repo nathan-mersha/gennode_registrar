@@ -1,6 +1,6 @@
 {
   "name": "gennode_registrar",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Registers route on gennode_authorization service.",
   "main": "index.js",
   "scripts": {
