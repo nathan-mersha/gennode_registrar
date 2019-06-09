@@ -18,13 +18,22 @@ This module registers service routes on [gennode_authorization](https://www.npmj
 
 > **Create New Instance**
 >
-> `let gennodeRegistrar = require('gennode_registrar'),`
->
-> `registrar = new gennodeRegistrar(serviceName,serviceCode,authorizationURL);`
+```javascript
+let gennodeRegistrar = require('gennode_registrar');
+let registrar = new gennodeRegistrar(serviceName,serviceCode,authorizationURL);
+
+```
 >
 > **Register Service Endpoints**
 >
-> `registrar.register(app,(error,response,body)=>{});`
+```javascript
+let express = require('express');
+let app = express();
+
+
+registrar.register(app,(error,response,body)=>{});
+
+```
 
 ### Contributing
 **Want to contribute, then visit repo [here](https://github.com/nathan-mersha/gennode_registrar.git)**
