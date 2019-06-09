@@ -7,7 +7,7 @@ Nathan Mersha
 
 Gennode registrar is available on npm, type:
 
-`$ sudo npm i -g gennode_registrar`
+`$ npm i gennode_registrar --save`
 
 and install it globally, now you can use it from the command line.
 
