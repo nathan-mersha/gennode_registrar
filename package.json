@@ -1,0 +1,28 @@
+{
+  "name": "gennode_registrar",
+  "version": "0.0.1",
+  "description": "Registers route on gennode_authorization service.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nathan-mersha/gennode_registrar.git"
+  },
+  "keywords": [
+    "gennode",
+    "registrar",
+    "route"
+  ],
+  "author": "Nathan Mersha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nathan-mersha/gennode_registrar/issues"
+  },
+  "homepage": "https://github.com/nathan-mersha/gennode_registrar#readme",
+  "dependencies": {
+    "express-list-endpoints": "^4.0.1",
+    "request": "^2.88.0"
+  }
+}
