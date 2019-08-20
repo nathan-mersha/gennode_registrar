@@ -12,7 +12,7 @@ Gennode registrar is available on npm, type:
 and install it globally, now you can use it from the command line.
 
 ### Description
-This module registers service routes on [gennode_authorization](https://www.npmjs.com/package/gennode_authorization) service.
+This module registers service routes on your authorization server. This library is one part of a cluster modules as defined in [gennode_authorization](https://www.npmjs.com/package/gennode_authorization)
 
 ### Example
 
@@ -20,7 +20,7 @@ This module registers service routes on [gennode_authorization](https://www.npmj
 >
 ```javascript
 let gennodeRegistrar = require('gennode_registrar');
-let registrar = new gennodeRegistrar(serviceName,serviceCode,authorizationURL);
+let registrar = new gennodeRegistrar("serviceName","serviceCode","http://localhost:3400/auth/service");
 
 ```
 >
